@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CASE FILE #143: The Suspiciously Handsome Suspect</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ----- GLOBAL STYLES ----- */
+body {
+    margin: 0;
+    background-color: #0b1a3d; /* Dark navy */
+    color: #fefefe; /* Creamy white */
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 700px;
+    padding: 30px 40px;
+    border: 2px solid #fefefe;
+    border-radius: 15px;
+    box-shadow: 0 0 25px rgba(255,255,255,0.2);
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+p, .output, .instruction {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    margin: 12px 0;
+    background-color: #ff4c6d;
+    color: #fefefe;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: 'Poppins', sans-serif;
+}
+
+button:hover {
+    background-color: #ff2a55;
+}
+
+.hidden {
+    display: none;
+}
+
+.output {
+    margin-top: 20px;
+    min-height: 120px;
+    white-space: pre-line;
+}
+
+/* Final Confetti */
+@keyframes confetti {
+    0% {transform: translateY(0) rotate(0deg);}
+    100% {transform: translateY(800px) rotate(360deg);}
+}
+
+.confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #ff4c6d;
+    top: -10px;
+    animation: confetti 2s linear infinite;
+    opacity: 0.8;
+    border-radius: 50%;
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="game">
+    <h1>CASE FILE #143</h1>
+    <p class="instruction">URGENT: A heart has gone missing.<br>Lead Investigator, click below to begin.</p>
+    <button id="startBtn">Begin Investigation</button>
+
+    <div class="output hidden" id="output"></div>
+</div>
+
+<script>
+const game = document.getElementById("game");
+const output = document.getElementById("output");
+const startBtn = document.getElementById("startBtn");
+
+let stage = 0;
+
+startBtn.addEventListener("click", () => {
+    stage = 1;
+    startBtn.classList.add("hidden");
+    output.classList.remove("hidden");
+    stageOne();
+});
+
+function stageOne() {
+    output.innerHTML = "Stage 1 – Crime Scene\n\nEvidence: Heart Fragments\n\nWitnesses report the suspect is suspiciously attractive, emotionally dangerous, and possesses an illegal smile.\n\nWhat was the weapon used in the crime?\nA) A sharp object\nB) A charming smile\nC) A math textbook\nD) Poor WiFi";
+    
+    const buttons = ["A","B","C","D"].map(letter => {
+        const btn = document.createElement("button");
+        btn.textContent = letter;
+        btn.addEventListener("click", () => {
+            if(letter === "B") stageTwo();
+            else {
+                output.innerHTML += `\n\n${wrongWeapon(letter)}`;
+            }
+        });
+        game.appendChild(btn);
+        return btn;
+    });
+}
+
+function wrongWeapon(letter) {
+    switch(letter) {
+        case "A": return "Incorrect. The suspect is bad at sharp objects.";
+        case "C": return "Incorrect. Math textbooks are not criminal evidence here.";
+        case "D": return "WiFi may be unstable, but that is not the crime here.";
+        default: return "Wrong answer.";
+    }
+}
+
+function stageTwo() {
+    clearButtons();
+    output.innerHTML = "Stage 2 – Witness Testimony\n\nType the primary cause of emotional disturbance:";
+    
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "Enter name...";
+    input.style.width = "100%";
+    input.style.padding = "10px";
+    input.style.marginTop = "12px";
+    game.appendChild(input);
+    
+    const submit = document.createElement("button");
+    submit.textContent = "Submit";
+    submit.addEventListener("click", () => {
+        const val = input.value.trim().toLowerCase();
+        if(val === "shamikebab") stageThree();
+        else output.innerHTML += "\n\nThat suspect is irrelevant. Try again.";
+    });
+    game.appendChild(submit);
+}
+
+function stageThree() {
+    clearGameArea();
+    output.innerHTML = "Stage 3 – Message Archives\n\nEvidence:\n- \"Did you eat?\"\n- \"I miss you.\"\n- \"I LOVE YOU YAAR\"\n\nWhat was the suspect’s true motive?\nA) World domination\nB) Emotional attachment\nC) Tax evasion\nD) Stealing snacks";
+    
+    const buttons = ["A","B","C","D"].map(letter => {
+        const btn = document.createElement("button");
+        btn.textContent = letter;
+        btn.addEventListener("click", () => {
+            if(letter === "B") stageFour();
+            else {
+                output.innerHTML += `\n\n${wrongMotive(letter)}`;
+            }
+        });
+        game.appendChild(btn);
+        return btn;
+    });
+}
+
+function wrongMotive(letter) {
+    switch(letter) {
+        case "A": return "World domination postponed.";
+        case "C": return "Tax records are safe. Not relevant.";
+        case "D": return "Snacks were not involved in this felony.";
+        default: return "Wrong answer.";
+    }
+}
+
+function stageFour() {
+    clearButtons();
+    output.innerHTML = "Stage 4 – Final Interrogation\n\nWhere is the missing heart currently located?\n(Type: Shamikebab / With Shamikebab / In Shamikebab)";
+    
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "Enter answer...";
+    input.style.width = "100%";
+    input.style.padding = "10px";
+    input.style.marginTop = "12px";
+    game.appendChild(input);
+    
+    const submit = document.createElement("button");
+    submit.textContent = "Submit";
+    submit.addEventListener("click", () => {
+        const val = input.value.trim().toLowerCase();
+        if(["shamikebab","with shamikebab","in shamikebab"].includes(val)) finalReveal();
+        else output.innerHTML += "\n\nSearch deeper, Investigator. Think emotionally.";
+    });
+    game.appendChild(submit);
+}
+
+function finalReveal() {
+    clearGameArea();
+    output.innerHTML = "CASE CLOSED.\n\nThe heart was never stolen. It was given willingly.\n\nShamikebab, you are officially guilty of being loved aggressively.\n\nSentence: Lifetime partnership.\nNo appeal allowed.\nNo escape possible.\n\nInvestigator's Note:\nGood job, son. You solved the mystery. Unfortunately, the real mystery was how I fell this hard for you.";
+    
+    const button = document.createElement("button");
+    button.textContent = "Accept Your Fate";
+    button.addEventListener("click", () => {
+        confettiEffect();
+        output.innerHTML += "\n\nRelationship Status: Permanently Locked In.\nGood job, son. You're stuck with me.";
+    });
+    game.appendChild(button);
+}
+
+function clearButtons() {
+    const btns = game.querySelectorAll("button");
+    btns.forEach(b => b.remove());
+}
+
+function clearGameArea() {
+    const inputs = game.querySelectorAll("input");
+    inputs.forEach(i => i.remove());
+    clearButtons();
+}
+
+function confettiEffect() {
+    for(let i=0;i<100;i++){
+        const c = document.createElement("div");
+        c.classList.add("confetti-piece");
+        c.style.left = Math.random()*window.innerWidth + "px";
+        c.style.backgroundColor = ['#ff4c6d','#ffd700','#00fff7','#ff69b4'][Math.floor(Math.random()*4)];
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(),3000);
+    }
+}
+</script>
+
+</body>
+</html>
